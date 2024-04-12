@@ -38,8 +38,12 @@ type (
 	}
 
 	NewPaymentResponse struct {
-		Id     string `json:"id"`
-		Status string `json:"status"`
+		Id           string `json:"id"`
+		Status       string `json:"status"`
+		Сonfirmation struct {
+			Type            string `json:"type"`
+			ConfirmationUrl string `json:"confirmation_url"`
+		} `json:"confirmation"`
 	}
 )
 
