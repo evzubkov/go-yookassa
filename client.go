@@ -34,12 +34,12 @@ type (
 		Type string `json:"type"`
 	}
 	NewPaymentRequest struct {
-		Amount            Amount        `json:"amount"`
-		Capture           bool          `json:"capture"`
-		Confirmation      Confirmation  `json:"confirmation"`
-		Description       string        `json:"description"`
-		PaymentMethod     PaymentMethod `json:"payment_method_data,omitempty"`
-		SavePaymentMethod string        `json:"save_payment_method,omitempty"`
+		Amount            Amount       `json:"amount"`
+		Capture           bool         `json:"capture"`
+		Confirmation      Confirmation `json:"confirmation"`
+		Description       string       `json:"description"`
+		PaymentMethod     interface{}  `json:"payment_method_data,omitempty"`
+		SavePaymentMethod string       `json:"save_payment_method,omitempty"`
 	}
 
 	NewPaymentResponse struct {
