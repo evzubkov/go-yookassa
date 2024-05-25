@@ -117,7 +117,7 @@ func (o *Client) NewPayment(ctx context.Context, payment NewPaymentRequest) (
 type CheckPaymentStatusResponse struct {
 	Id            string        `json:"id,omitempty"`
 	Status        string        `json:"status,omitempty"`
-	Amount        interface{}   `json:"amount,omitempty"`
+	Amount        Amount        `json:"amount,omitempty"`
 	IncomeAmount  IncomeAmount  `json:"income_amount,omitempty"`
 	PaymentMethod PaymentMethod `json:"payment_method,omitempty"`
 }
@@ -162,9 +162,7 @@ type CapturePaymentResponse struct {
 	PaymentMethod PaymentMethod `json:"payment_method,omitempty"`
 }
 
-// CapturePayment  - move holding payment
-//
-// Transfer money with a two-stage character
+// CapturePayment  - подтвердить списание захолдированных средств при двухстадийном платеже
 func (o *Client) CapturePayment(ctx context.Context, amount Amount, paymentId string) (result CapturePaymentResponse, err error) {
 
 	payload, err := json.Marshal(amount)
@@ -210,9 +208,7 @@ type CancelPaymentResponse struct {
 	PaymentMethod PaymentMethod `json:"payment_method,omitempty"`
 }
 
-// CancelPayment  - cancel holding payment
-//
-// Cancel payment for two-step payment
+// CancelPayment  - отменить списание захолдированных средств при двухстадийном платеже
 func (o *Client) CancelPayment(ctx context.Context, paymentId string) (result CancelPaymentResponse, err error) {
 
 	req, _ := http.NewRequestWithContext(
