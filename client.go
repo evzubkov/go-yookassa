@@ -27,34 +27,51 @@ type (
 		Currency string `json:"currency"`
 	}
 	Confirmation struct {
-		Type      string `json:"type"`
-		ReturnUrl string `json:"return_url"`
+		Type            string `json:"type,omitempty"`
+		ReturnUrl       string `json:"return_url,omitempty"`
+		ConfirmationUrl string `json:"confirmation_url,omitempty"`
+	}
+	CardProduct struct {
+		Code string `json:"code,omitempty"`
+	}
+	Card struct {
+		First6      string      `json:"first6,omitempty"`
+		Last4       string      `json:"last4,omitempty"`
+		ExpiryYear  string      `json:"expiry_year,omitempty"`
+		ExpiryMonth string      `json:"expiry_month,omitempty"`
+		CardType    string      `json:"card_type,omitempty"`
+		CardProduct interface{} `json:"card_product,omitempty"`
 	}
 	PaymentMethod struct {
-		Type string `json:"type"`
+		Id            string      `json:"id,omitempty"` //id метода оплаты для проведения автоплатежей
+		Type          string      `json:"type,omitempty"`
+		Title         string      `json:"title,omitempty"`
+		Saved         bool        `json:"saved,omitempty"`
+		Card          interface{} `json:"card,omitempty"`
+		IssuerCountry string      `json:"issuer_country,omitempty"`
 	}
+	IncomeAmount struct {
+		Value    string `json:"value,omitempty"`
+		Currency string `json:"currency,omitempty"`
+	}
+)
+
+type (
 	NewPaymentRequest struct {
-		Amount            Amount       `json:"amount"`
-		Capture           bool         `json:"capture"`
-		Confirmation      Confirmation `json:"confirmation"`
-		Description       string       `json:"description"`
-		PaymentMethod     interface{}  `json:"payment_method_data,omitempty"`
-		SavePaymentMethod string       `json:"save_payment_method,omitempty"`
+		Amount            Amount      `json:"amount,omitempty"`
+		Capture           bool        `json:"capture,omitempty"` // true - мгновенное списание, false - двухстадийная оплата с холдированием средств
+		Description       string      `json:"description,omitempty"`
+		Confirmation      interface{} `json:"confirmation,omitempty"`
+		PaymentMethod     interface{} `json:"payment_method_data,omitempty"`
+		SavePaymentMethod string      `json:"save_payment_method,omitempty"` //true - для сохранения метода и оплаты и проведения автоплатежей
 	}
 
 	NewPaymentResponse struct {
-		Id            string `json:"id"`
-		Amount        Amount `json:"amount"`
-		Status        string `json:"status"`
-		PaymentMethod struct {
-			Type  string `jsoon:"type"`
-			Id    string `json:"id"`
-			Saved bool   `json:"saved"`
-		} `json:"payment_method"`
-		Сonfirmation struct {
-			Type            string `json:"type"`
-			ConfirmationUrl string `json:"confirmation_url"`
-		} `json:"confirmation"`
+		Id            string        `json:"id,omitempty"`
+		Amount        Amount        `json:"amount,omitempty"`
+		Status        string        `json:"status,omitempty"`
+		PaymentMethod PaymentMethod `json:"payment_method,omitempty"`
+		Сonfirmation  Confirmation  `json:"confirmation,omitempty"`
 	}
 )
 
@@ -98,32 +115,11 @@ func (o *Client) NewPayment(ctx context.Context, payment NewPaymentRequest) (
 }
 
 type CheckPaymentStatusResponse struct {
-	Id     string `json:"id"`
-	Status string `json:"status"`
-	Amount struct {
-		Value    string `json:"value"`
-		Currency string `json:"currency"`
-	} `json:"amount"`
-	IncomeAmount struct {
-		Value    string `json:"value"`
-		Currency string `json:"currency"`
-	} `json:"income_amount"`
-	PaymentMethod struct {
-		Id    string `json:"id"`
-		Type  string `json:"type"`
-		Title string `json:"title"`
-		Card  struct {
-			First6      string `json:"first6"`
-			Last4       string `json:"last4"`
-			ExpiryYear  string `json:"expiry_year"`
-			ExpiryMonth string `json:"expiry_month"`
-			CardType    string `json:"card_type"`
-			CardProduct struct {
-				Code string `json:"code"`
-			} `json:"card_product"`
-		} `json:"card"`
-		IssuerCountry string `json:"issuer_country"`
-	} `json:"payment_method"`
+	Id            string        `json:"id,omitempty"`
+	Status        string        `json:"status,omitempty"`
+	Amount        interface{}   `json:"amount,omitempty"`
+	IncomeAmount  IncomeAmount  `json:"income_amount,omitempty"`
+	PaymentMethod PaymentMethod `json:"payment_method,omitempty"`
 }
 
 // CheckPaymentStatus - check payment status
@@ -160,14 +156,10 @@ func (o *Client) CheckPaymentStatus(ctx context.Context, paymentId string) (resu
 }
 
 type CapturePaymentResponse struct {
-	Id            string `json:"id"`
-	Amount        Amount `json:"amount"`
-	Status        string `json:"status"`
-	PaymentMethod struct {
-		Type  string `jsoon:"type"`
-		Id    string `json:"id"`
-		Saved bool   `json:"saved"`
-	} `json:"payment_method"`
+	Id            string        `json:"id,omitempty"`
+	Amount        Amount        `json:"amount,omitempty"`
+	Status        string        `json:"status,omitempty"`
+	PaymentMethod PaymentMethod `json:"payment_method,omitempty"`
 }
 
 // CapturePayment  - move holding payment
@@ -211,15 +203,11 @@ func (o *Client) CapturePayment(ctx context.Context, amount Amount, paymentId st
 }
 
 type CancelPaymentResponse struct {
-	Id            string `json:"id"`
-	Amount        Amount `json:"amount"`
-	Status        string `json:"status"`
-	Paid          bool   `json:"paid"`
-	PaymentMethod struct {
-		Type  string `jsoon:"type"`
-		Id    string `json:"id"`
-		Saved bool   `json:"saved"`
-	} `json:"payment_method"`
+	Id            string        `json:"id,omitempty"`
+	Amount        Amount        `json:"amount,omitempty"`
+	Status        string        `json:"status,omitempty"`
+	Paid          bool          `json:"paid,omitempty"`
+	PaymentMethod PaymentMethod `json:"payment_method,omitempty"`
 }
 
 // CancelPayment  - cancel holding payment
