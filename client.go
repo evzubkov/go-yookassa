@@ -43,7 +43,7 @@ type (
 		CardProduct interface{} `json:"card_product,omitempty"`
 	}
 	PaymentMethod struct {
-		Id            string      `json:"id,omitempty"` //id метода оплаты для проведения автоплатежей
+		Id            string      `json:"id,omitempty"` // id метода оплаты для проведения автоплатежей
 		Type          string      `json:"type,omitempty"`
 		Title         string      `json:"title,omitempty"`
 		Saved         bool        `json:"saved,omitempty"`
@@ -63,7 +63,8 @@ type (
 		Description       string      `json:"description,omitempty"`
 		Confirmation      interface{} `json:"confirmation,omitempty"`
 		PaymentMethod     interface{} `json:"payment_method_data,omitempty"`
-		SavePaymentMethod string      `json:"save_payment_method,omitempty"` //true - для сохранения метода и оплаты и проведения автоплатежей
+		PaymentMethodId   string      `json:"payment_method_id,omitempty"`   // сюда вставляется id связки для проведения автоплатежей
+		SavePaymentMethod string      `json:"save_payment_method,omitempty"` // true - для сохранения метода и оплаты и проведения автоплатежей
 	}
 
 	NewPaymentResponse struct {
